@@ -1,24 +1,33 @@
 import express, { request, response } from "express";
 
 const sever = express();
+sever.use(express.json())
+
+const fakeData = {
+    id:1,
+    name:"redmi note 8"
+}
 
 sever.get("/",(request,response,next)=>{
-    console.log("request server");
-    response.send("Hello server")
+   
+    response.status(200).json(fakeData)
     
-})
+});
 
-sever.get("/about",(req,res)=>{
-    res.send("hello about")
-})
+sever.post("/",(req,res)=>{
+const {name} = req.body// const data  ={"name":"hh","age":20}
+console.log("name is  ", name);
+if (!name){
+    return res.status(400).json({"message":"invaild name"})
+}
+if(name.length < 2){
+    return res.status(400).json({"message":"name must be at least 2char"})
+}
+return res.status(200).json({"message":"ok"})
+});
 
-sever.post ("/post",(req,res)=>{
-    res.send("hello post")
-})
-sever.get("/*",(req,res)=>{
-res.send("Page not Found ,404")
-})
 const port = 3000
+
 sever.listen(port,() => {
     console.log("App is Running");
     
